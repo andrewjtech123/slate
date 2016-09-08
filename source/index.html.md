@@ -1,15 +1,17 @@
 ---
-title: API Reference
+title: MusicApp API Docs
 
 language_tabs:
-  - shell
-  - ruby
-  - python
-  - javascript
+- shell: cURL
+- ruby: Ruby
+- php: PHP
+- javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='https://github.com/acme'>Client libraries</a>
+
 
 includes:
   - errors
@@ -65,27 +67,26 @@ Kittn expects for the API key to be included in all API requests to the server i
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
 
-# Kittens
+# Albums
 
-## Get All Kittens
+## Get All Albums
 
 ```ruby
-require 'kittn'
+require 'music'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+api = Music::APIClient.authorize!('your-api-key')
+api.albums.get
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "http://example.com/api/albums"
+  -H "Authorization: your-api-key"
+```
+
+```php
+$client = new Acme\Music\Client('your-api-key');
+$client->authorize();
+$albums = $client->getAlbums();
 ```
 
 ```javascript
@@ -101,17 +102,16 @@ let kittens = api.kittens.get();
 [
   {
     "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "title": "Dubnobasswithmyheadman",
+    "breed": "Underworld",
+    "artist": Underworld,
+    "year": 1994
   },
   {
     "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "title": "ISDN",
+    "artist": "unknown",
+    "year": 1994
   }
 ]
 ```
