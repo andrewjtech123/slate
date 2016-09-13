@@ -121,53 +121,135 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        <h1 id="draft-orders">Draft Orders</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>The Draft Orders API makes it possible to retrieve and create a draft order via the API. Additionally, using this API, it is possible to create an order on which taxes and all total amounts are calculated automatically by Shopify.</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>For more information, see our guide (link).</p>
 
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<h2 id="the-draft-orders-object">The draft orders object</h2>
 
-<h1 id="authentication">Authentication</h1>
+<table><thead>
+<tr>
+<th>Attributes</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">id</code><br><em>integer</em></br></td>
+<td>The <code class="prettyprint">id</code> of the draft order.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">order_id</code><br><em>integer</em></br></td>
+<td>The <code class="prettyprint">id</code> of the order associated to the draft order, once created.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">name</code><br><em>string</em></br></td>
+<td>Name of the draft order.<br> <strong>format:</strong> <em>#D<number></em>, where <em>number</em> is an sequential identifier unique to the shop, starting at 1. For example, #D133</td>
+</tr>
+<tr>
+<td><code class="prettyprint">customer</code><br><em>object</em></br></td>
+<td>Customer object (link to customer object definition)</td>
+</tr>
+<tr>
+<td><code class="prettyprint">shipping_address</code><br><em>object</em></br></td>
+<td>The mailing address to where the draft order will be shipped. (link)</td>
+</tr>
+<tr>
+<td><code class="prettyprint">billing_address</code><br><em>object</em></br></td>
+<td>The mailing address associated with the payment method. (link)</td>
+</tr>
+<tr>
+<td><code class="prettyprint">note</code><br><em>string</em></br></td>
+<td>The text of an optional note that a shop owner can attach to the draft order.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">email</code><br><em>string</em></br></td>
+<td>The email address used for sending notifications.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">currency</code><br><em>string</em></br></td>
+<td>The three letter code for the currency to be used for the payment.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">invoices_sent_at</code><br><em>dateTime</em></br></td>
+<td>DateTime when the invoice was emailed to the customer by Shopify.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">invoice_url</code><br><em>string</em></br></td>
+<td>The url to send to the customer so that they can complete the checkout.  When using <code class="prettyprint">send_invoice</code>, this url is emailed to the customer. This field can be used so that an API client can use another method of communication to provide the url to the customer.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">line_items[]</code><br><em>array of line items</em></br></td>
+<td>Link to table below</td>
+</tr>
+<tr>
+<td><code class="prettyprint">metafields[]</code><br><em>array of metafields</em></br></td>
+<td>Link to table below</td>
+</tr>
+<tr>
+<td><code class="prettyprint">shipping_line</code> <br><em>object</em></br></td>
+<td>shipping_line object</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tags</code><br><em>string of csv</em></br></td>
+<td>Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values. Each individual tag is limited to 40 characters in length.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tax_exempt</code><br><em>boolean</em></br></td>
+<td>Sets whether taxes are exempt for this draft order. If this value is false, Shopify will honor the <code class="prettyprint">tax_exempt</code> value for each <code class="prettyprint">line_item</code>.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">tax_lines[]</code><br><em>array of tax line sums</em></br></td>
+<td>Tax lines describing the sum of each type of tax line for line items and shipping line.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">total_weight</code><br><em>integer</em></br></td>
+<td>The weight of all the line items.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">discount</code><br><em>boolean</em></br></td>
+<td>Order level discount.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">total_line_items_price</code><br><em>integer</em></br></td>
+<td>Subtotal before order-level discounts, shipping and taxes have been applied</td>
+</tr>
+<tr>
+<td><code class="prettyprint">total_shipping_price</code><br><em>integer</em></br></td>
+<td>Total cost of shipping</td>
+</tr>
+<tr>
+<td><code class="prettyprint">total_tax</code><br><em>integer</em></br></td>
+<td>Total tax amount</td>
+</tr>
+<tr>
+<td><code class="prettyprint">subtotal_price</code><br><em>integer</em></br></td>
+<td>Subtotal after discounts, before shipping and taxes have been applied</td>
+</tr>
+<tr>
+<td><code class="prettyprint">total_price</code><br><em>integer</em></br></td>
+<td>Includes discounts, shipping and taxes</td>
+</tr>
+<tr>
+<td><code class="prettyprint">completed_at</code><br><em>dateTime</em></br></td>
+<td>Date at which an order was created and the draft order moved to “completed” status.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">created_at</code><br><em>dateTime</em></br></td>
+<td>Date at which an order was created.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">updated_at</code><br><em>dateTime</em></br></td>
+<td>Date at which an order was updated.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">status</code><br><em>dateTime</em></br></td>
+<td>String describing the state of the draft order: <code class="prettyprint">open</code>, <code class="prettyprint">invoice sent</code>, <code class="prettyprint">completed</code>.</td>
+</tr>
+</tbody></table>
 
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-</code></pre>
-
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-<h1 id="albums">Albums</h1>
-
-<h2 id="get-all-albums">Get All Albums</h2>
+<h2 id="get-admin-draft_orders-json">Get /admin/draft_orders.json</h2>
 <pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'music'</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="no">Music</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'your-api-key'</span><span class="p">)</span>
@@ -206,90 +288,55 @@ $albums = $client-&gt;getAlbums();
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 
-<p>This endpoint retrieves all kittens.</p>
+<p>Retrieve a list of all Draft Orders.</p>
+
+<p>This is a good place to call out dependencies with other API calls (order etc.) and link to additional guides ad tutorials to view sequence diagrams, flows, and more detailed use-case based information.</p>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
+<p><code class="prettyprint">GET admin/draft_orders.json</code></p>
 
 <h3 id="query-parameters">Query Parameters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td><code class="prettyprint">field</code><br><em>optional, by default returns all fields</em></br></td>
+<td>Comma-separated list of fields to include in the response.</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td><code class="prettyprint">limit</code><br><em>optional, default 50, max 250</em></br></td>
+<td>Filter page size.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">page</code><br><em>optional</em></br></td>
+<td>Display a specific page.</td>
+</tr>
+<tr>
+<td><code class="prettyprint">since_id</code><br><em>optional</em></br></td>
+<td>Restrict results to be after given ID</td>
+</tr>
+<tr>
+<td><code class="prettyprint">status</code><br><em>optional</em></br></td>
+<td>Filter by status.  Possible values: <code class="prettyprint">open</code>,<code class="prettyprint">invoice_sent</code>,<code class="prettyprint">completed</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">ids</code><br><em>optional</em></br></td>
+<td>Filter by list of <code class="prettyprint">ids</code></td>
 </tr>
 </tbody></table>
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Get all the things!
 </aside>
 
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<h3 id="returns">Returns</h3>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre>
-
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can&rsquo;t use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
-
-<h3 id="url-parameters">URL Parameters</h3>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
+<p>Returns an array of <code class="prettyprint">draft_orders</code> objects formatted as JSON.</p>
 
           <h1 id="errors">Errors</h1>
 
@@ -304,48 +351,52 @@ Remember — a happy kitten is an authenticated kitten!
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td>200 OK</td>
+<td>Successful API request.</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>201 Created</td>
+<td>The request has been fulfilled and a new resource has been created.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+<td>400 Bad Request</td>
+<td>The request cannot be fulfilled due to bad syntax.</td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td>401 Unauthorized</td>
+<td>Authentication is required and has not been provided or has failed.</td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+<td>403 Forbidden</td>
+<td>The request was a valid request but the server is refusing to respond to it.</td>
 </tr>
 <tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+<td>404 Not Found</td>
+<td>The requested resource could not be found but could be available again in the future.</td>
 </tr>
 <tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+<td>405 Method Not Allowed</td>
+<td>A request was made of a resource using a method that is not accepted by that resource. For example, using a GET request when it should be a POST.</td>
 </tr>
 <tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
+<td>406 Not Acceptable</td>
+<td>The requested resource is only capable of generating content not acceptable according to the Accept headers sent in the request.</td>
 </tr>
 <tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+<td>411 Length Required</td>
+<td>The request did not specify the length of the content, which is required by the requested resource.</td>
 </tr>
 <tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+<td>422 Unprocessable Entity</td>
+<td>The request was well-formed but there was some semantic errors.</td>
 </tr>
 <tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+<td>500, 501, 502</td>
+<td>Shopify Server Errors.</td>
+</tr>
+<tr>
+<td>503 Service Unavailable</td>
+<td>The server is currently unavailable (because it is overloaded or down for service). If you reach your API limits you will receive this error.</td>
 </tr>
 </tbody></table>
 
